@@ -1,0 +1,44 @@
+image: docker:latest
+services:
+  - docker:dind
+
+stages:
+  - sast
+  - build 
+  - package
+  - deploy-k8s
+
+variables:
+  TAG: $CI_COMMIT_MESSAGE
+
+sast:
+  stage: sast
+include:
+- template: Security/SAST.gitlab-ci.yml
+
+docker-build:
+  stage: package
+  before_script:
+    - docker login -u asmaeel -p $DOCKER_HUB_PASS 
+  script:
+    - docker build -t asmaeel/email-microservice:$TAG .
+    - docker push asmaeel/email-microservice:$TAG
+
+gitops-k8s-deploy:
+  image: bitnami/git:latest
+  stage: deploy-k8s
+  before_script:
+    - git config --global user.email "elazrakasmae@gmail.com"
+    - git config --global user.name "Asmae20"
+  script:
+    - git clone https://gitlab.com/Asmae20/email-microservice.git
+    - cd email-microservice/file-k8s/
+    - sed -i "s/email-microservice:1.0/email-microservice:$TAG/g" email-deployment.yml
+    - cat email-deployment.yml
+    - git add email-deployment.yml
+    - git commit -m "microservice version $TAG"
+    - git remote set-url origin https://Asmae20:$GIT_PASSWORD@gitlab.com/Asmae20/email-microservice.git
+    - git push -uf origin main
+
+after_script:
+  - docker logout

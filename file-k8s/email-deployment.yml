@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+ name: mongodb-conf
+ namespace: m-ecommerce
+data:
+ host: mongodb-service
+ port: "27017"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: email-deployment
+  namespace: m-ecommerce
+spec:
+  selector:
+    matchLabels:
+      app: email-deployment
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: email-deployment
+    spec:
+      containers:
+        - name: email-deployment
+          image: asmaeel/email-microservice:1.0
+          ports:
+            - containerPort: 5010
+              name: email-port
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: mongodb-conf
+                  key: host
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: mongodb-conf
+                  key: port
+            - name: MONGO_URI
+              value: "mongodb://mongodb-service/microservices"
+            
