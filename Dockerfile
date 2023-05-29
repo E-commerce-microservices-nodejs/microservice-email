@@ -5,7 +5,7 @@ FROM node:16.20-bullseye-slim AS build
 ENV NODE_ENV=development
 ENV PORT=5006
 ENV RABBIT_MQ_URI=amqp://rabbitmq:5672
-ENV ORGANIZATION_EMAIL=riad.elhajjaji@outlook.com
+ENV ORGANIZATION_EMAIL=myemail.cloud@outlook.com
 ENV ORGANIZATION_PASSWORD=cloud2023
 # Set the working directory
 WORKDIR /app
