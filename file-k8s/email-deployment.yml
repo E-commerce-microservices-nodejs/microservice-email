@@ -42,4 +42,6 @@ spec:
                   key: port
             - name: MONGO_URI
               value: "mongodb://mongodb-service/microservices"
+            - name: RabbitMQ
+              value: "http://rabbitmq:5672"
             
