@@ -6,6 +6,15 @@ metadata:
 data:
  host: mongodb-service
  port: "27017"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+ name: organization-secret
+ namespace: m-ecommerce
+data:
+ ORGANIZATION_PASSWORD: Y2xvdWQyMDIzCg==
+
 
 ---
 apiVersion: apps/v1
@@ -27,7 +36,7 @@ spec:
         - name: email-deployment
           image: asmaeel/email-microservice:1.1
           ports:
-            - containerPort: 5010
+            - containerPort: 5006
               name: email-port
           env:
             - name: DB_HOST
@@ -42,6 +51,13 @@ spec:
                   key: port
             - name: MONGO_URI
               value: "mongodb://mongodb-service/microservices"
-            - name: RabbitMQ
-              value: "http://rabbitmq:5672"
+            - name: RABBIT_MQ_URI
+              value: "amqp://rabbitmq:5672"
+            - name: ORGANIZATION_EMAIL
+              value: "riad.elhajjaji@outlook.com"
+            - name: organization-password
+              valueFrom:
+                secretKeyRef:
+                  name: organization-secret
+                  key: ORGANIZATION_PASSWORD
             

@@ -21,7 +21,7 @@ FROM node:16.20-bullseye-slim
 
 # Set environment variables
 ENV NODE_ENV=production
-ENV PORT=5010
+ENV PORT=5006
 
 # Set the working directory
 WORKDIR /app
@@ -34,7 +34,7 @@ COPY package*.json ./
 RUN npm ci --only=production
 
 # Expose the port on which the application listens
-EXPOSE 5010
+EXPOSE 5006
 
 # Use a non-root user for security reasons
 USER node

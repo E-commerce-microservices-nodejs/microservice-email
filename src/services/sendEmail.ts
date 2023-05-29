@@ -1,4 +1,7 @@
 import nodemailer from "nodemailer";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const sendEmail = async (emailData: {
   to: string;
@@ -6,19 +9,21 @@ const sendEmail = async (emailData: {
   body: string;
 }): Promise<void> => {
   const smtpConfig = {
-    host: "smtp.gmail.com",
-    port: 465,
+    host: "smtp-mail.outlook.com",
+    service: "outlook", // service name
+    secureConnection: false,
+    port: 587,
 
-    secure: true, // use SSL
+    secure: false, // use SSL
     auth: {
-      user: "elhryad8@gmail.com",
-      pass: "0670506h#"
+      user: `${process.env.ORGANIZATION_EMAIL}`,
+      pass: `${process.env.ORGANIZATION_PASSWORD}`
     }
   };
   const transporter = nodemailer.createTransport(smtpConfig);
 
   const mailOptions = {
-    from: "elhryad8@gmail.com",
+    from: `${process.env.ORGANIZATION_EMAIL}`,
     to: emailData.to,
     subject: emailData.subject,
     text: emailData.body

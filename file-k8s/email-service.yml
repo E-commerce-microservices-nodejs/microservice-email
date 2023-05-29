@@ -10,5 +10,5 @@ spec:
     app: email-deployment
   ports:
     - protocol: TCP
-      port: 5010
-      targetPort: 5010
+      port: 5006
+      targetPort: 5006
