@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rabbitmq
+  namespace: m-ecommerce
+spec:
+  serviceName: rabbitmq
+  replicas: 2  # Number of replicas
+  selector:
+    matchLabels:
+      app: rabbitmq
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+    spec:
+      containers:
+        - name: rabbitmq
+          image: rabbitmq:3-alpine  # RabbitMQ container image
+          ports:
+            - containerPort: 5672  # RabbitMQ default port
+            - containerPort: 15672  # RabbitMQ management console port
+          volumeMounts:
+            - name: rabbitmq-data
+              mountPath: /var/lib/rabbitmq  # Mount path for persistent storage
+  volumeClaimTemplates:
+    - metadata:
+        name: rabbitmq-data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi  # Requested storage size per replica
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+spec:
+  type: ClusterIP
+  selector:
+    app: rabbitmq
+  ports:
+    - name: amqp
+      protocol: TCP
+      port: 5672  # RabbitMQ default port
+    - name: management
+      protocol: TCP
+      port: 15672 # RabbitMQ management console port
