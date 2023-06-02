@@ -34,7 +34,7 @@ spec:
     spec:
       containers:
         - name: email-deployment
-          image: asmaeel/email-microservice:1.4
+          image: asmaeel/email-microservice:1.5
           ports:
             - containerPort: 5006
               name: email-port
