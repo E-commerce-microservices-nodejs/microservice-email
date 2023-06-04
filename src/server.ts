@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
-import app from "./app";
+// import app from "./app";
 import rabbitMqConnect from "./controller";
 
-app.listen(`${process.env.PORT}`, () => {
-  console.log(`Server listening on ${process.env.PORT}`);
-});
+// app.listen(`${process.env.PORT}`, () => {
+//   console.log(`Server listening on ${process.env.PORT}`);
+// });
 
 rabbitMqConnect()
   .then(() => {

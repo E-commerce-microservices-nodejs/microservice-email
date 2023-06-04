@@ -1,12 +1,16 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
+import buildEmailBody from "./buildEmailBody";
 
 dotenv.config();
 
 const sendEmail = async (emailData: {
   to: string;
   subject: string;
-  body: string;
+  fullname: string;
+  amount: number;
+  orderId: string;
+  transactionId: string;
 }): Promise<void> => {
   const smtpConfig = {
     host: "smtp-mail.outlook.com",
@@ -21,12 +25,17 @@ const sendEmail = async (emailData: {
     }
   };
   const transporter = nodemailer.createTransport(smtpConfig);
-
+  const placeholders = {
+    fullname: emailData.fullname,
+    orderId: emailData.orderId,
+    paymentId: emailData.transactionId
+  };
+  const body = buildEmailBody(placeholders);
   const mailOptions = {
     from: `${process.env.ORGANIZATION_EMAIL}`,
     to: emailData.to,
     subject: emailData.subject,
-    text: emailData.body
+    html: body
   };
 
   await transporter.sendMail(mailOptions);

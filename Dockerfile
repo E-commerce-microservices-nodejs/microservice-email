@@ -4,7 +4,7 @@ FROM node:16.20-bullseye-slim AS build
 # Set environment variables
 ENV NODE_ENV=development
 ENV PORT=5006
-ENV RABBIT_MQ_URI=amqp://rabbitmq:5672
+ENV RABBIT_MQ_URI=amqp://rabbitmq-service:5672
 ENV ORGANIZATION_EMAIL=myemail.cloud@outlook.com
 ENV ORGANIZATION_PASSWORD=cloud2023
 # Set the working directory
@@ -25,7 +25,7 @@ FROM node:16.20-bullseye-slim
 # Set environment variables
 ENV NODE_ENV=production
 ENV PORT=5006
-ENV RABBIT_MQ_URI=amqp://rabbitmq:5672
+ENV RABBIT_MQ_URI=amqp://rabbitmq-service:5672
 ENV ORGANIZATION_EMAIL=myemail.cloud@outlook.com
 ENV ORGANIZATION_PASSWORD=cloud2023
 # Set the working directory

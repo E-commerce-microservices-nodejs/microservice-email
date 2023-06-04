@@ -16,20 +16,19 @@ async function rabbitMqConnect(): Promise<void> {
     await channel.consume("email", (message: amqp.ConsumeMessage | null) => {
       console.log("message received", message?.content.toString());
       if (message) {
-        const emailData: { to: string; subject: string; body: string } = {
-          to: "riadelhajjaji@gmail",
-          subject: "my message",
-          body: "Hello i am riad"
-        };
-        // =JSON.parse(message.content.toString());
-        console.log("send Email...");
+        const emailData = JSON.parse(message.content.toString());
+        console.log(emailData);
+
         sendEmail(emailData)
           .then(() => {
-            console.log(`Email sent to ${emailData.to}`);
+            console.log(`Email sent to ${emailData.fullname}`);
             channel.ack(message);
           })
           .catch((error) => {
-            console.error(`Failed to send email to ${emailData.to}`, error);
+            console.error(
+              `Failed to send email to ${emailData.fullname}`,
+              error
+            );
             channel.nack(message);
           });
       }
@@ -40,5 +39,4 @@ async function rabbitMqConnect(): Promise<void> {
     console.error(ex);
   }
 }
-
 export default rabbitMqConnect;
